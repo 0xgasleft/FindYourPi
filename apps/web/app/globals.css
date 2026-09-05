@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-void-950 text-neutral-100 antialiased;
+  }
+
+  ::selection {
+    @apply bg-pi-gold/30 text-white;
+  }
+
+  * {
+    @apply border-white/10;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Precision-cut corner, LayerZero/HUD-style: one corner sheared at 45°
+     instead of rounded. Used on tags/badges to keep the sharp identity
+     without every element reading as a plain rectangle. */
+  .clip-tag {
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  }
+  .clip-tag-sm {
+    clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
+  }
+
+  .grid-backdrop {
+    background-image: theme("backgroundImage.grid-lines");
+    background-size: theme("backgroundSize.grid");
+    mask-image: radial-gradient(ellipse 60% 50% at 50% 30%, black 40%, transparent 100%);
+  }
+}

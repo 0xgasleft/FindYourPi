@@ -1,0 +1,27 @@
+node_modules/
+.pnpm-store/
+dist/
+build/
+.next/
+out/
+coverage/
+*.log
+.env
+.env.local
+.env.*.local
+.DS_Store
+Thumbs.db
+.turbo/
+.vercel/
+test-results/
+playwright-report/
+blob-report/
+artifacts/
+cache/
+typechain-types/
+*.tsbuildinfo
+
+# Generated π dataset artifacts (large binaries) — reproducible via
+# `pnpm --filter @pi-hunter/pi-search generate`, see packages/pi-search/README.md.
+packages/pi-search/data/
+

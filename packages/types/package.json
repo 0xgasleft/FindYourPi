@@ -1,0 +1,16 @@
+{
+  "name": "@pi-hunter/types",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Shared TS types + contract ABIs. ABIs are committed, generated snapshots (src/generated/*.abi.json) — see scripts/sync-abis.mjs — not a live dependency on packages/contracts, so anything importing this (apps/web included) builds without a Solidity toolchain.",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "sync-abis": "node scripts/sync-abis.mjs"
+  },
+  "devDependencies": {
+    "@pi-hunter/config": "workspace:*",
+    "typescript": "5.5.3"
+  }
+}
