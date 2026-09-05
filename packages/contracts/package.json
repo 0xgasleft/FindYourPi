@@ -1,0 +1,24 @@
+{
+  "name": "@pi-hunter/contracts",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "node": "hardhat node",
+    "deploy:localhost": "hardhat run scripts/deploy.ts --network localhost"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox-viem": "3.0.0",
+    "@openzeppelin/contracts": "5.1.0",
+    "@types/node": "20.14.10",
+    "chai": "4.5.0",
+    "hardhat": "2.26.3",
+    "typescript": "5.5.3"
+  },
+  "dependencies": {
+    "@pi-hunter/pi-core": "workspace:*",
+    "@pi-hunter/proofs": "workspace:*",
+    "viem": "2.21.19"
+  }
+}

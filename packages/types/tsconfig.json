@@ -1,0 +1,10 @@
+{
+  "extends": "@pi-hunter/config/tsconfig.base.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "outDir": "dist"
+  },
+  "include": ["src/**/*.ts"]
+}
