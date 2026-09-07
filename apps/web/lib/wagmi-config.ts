@@ -8,6 +8,12 @@ import { hardhatLocal, baseSepolia } from "./chains";
 export const wagmiConfig = createConfig({
   chains: [hardhatLocal, baseSepolia],
   connectors: [injected()],
+  // Required for Next.js SSR: without this, wagmi restores a persisted
+  // wallet connection (from localStorage) synchronously on the client,
+  // which renders "0x123..." while the server-rendered HTML said "Connect
+  // Wallet" — a hydration mismatch. `ssr: true` defers that restore until
+  // after the initial client render instead. See wagmi's SSR guide.
+  ssr: true,
   transports: {
     [hardhatLocal.id]: http(),
     [baseSepolia.id]: http(process.env.NEXT_PUBLIC_RPC_URL ?? baseSepolia.rpcUrls.default.http[0]),
