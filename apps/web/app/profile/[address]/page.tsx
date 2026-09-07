@@ -2,12 +2,14 @@ import Link from "next/link";
 import { fetchProfile } from "@/lib/api";
 import { RarityBadge } from "../../components/rarity-badge";
 
-export async function generateMetadata({ params }: { params: { address: string } }) {
-  return { title: `${params.address.slice(0, 8)}... — Pi Hunter Profile` };
+export async function generateMetadata({ params }: { params: Promise<{ address: string }> }) {
+  const { address } = await params;
+  return { title: `${address.slice(0, 8)}... — Pi Hunter Profile` };
 }
 
-export default async function ProfilePage({ params }: { params: { address: string } }) {
-  const profile = await fetchProfile(params.address);
+export default async function ProfilePage({ params }: { params: Promise<{ address: string }> }) {
+  const { address } = await params;
+  const profile = await fetchProfile(address);
 
   return (
     <main className="min-h-screen bg-void-950 px-6 py-16">

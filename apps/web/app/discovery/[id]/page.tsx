@@ -12,8 +12,9 @@ function short(addr: string) {
   return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
 }
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const discovery = await fetchDiscovery(params.id);
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  const discovery = await fetchDiscovery(id);
   if (!discovery) return { title: "Discovery not found — Pi Hunter" };
 
   const title = `${discovery.sequence} — Found at position ${discovery.position.toLocaleString()} in π`;
@@ -26,8 +27,9 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   };
 }
 
-export default async function DiscoveryPage({ params }: { params: { id: string } }) {
-  const discovery = await fetchDiscovery(params.id);
+export default async function DiscoveryPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const discovery = await fetchDiscovery(id);
   if (!discovery) notFound();
 
   const shareUrl = `https://pihunter.example/discovery/${discovery.discovery_id}`;
