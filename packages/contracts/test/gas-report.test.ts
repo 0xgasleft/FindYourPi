@@ -4,7 +4,7 @@ import { buildDatasetTree, buildOccurrenceProof, type ChunkProof as TsChunkProof
 import { digitsToBytes } from "@pi-hunter/pi-core";
 
 /**
- * Measures REAL gas usage for claim() against a locally-deployed contract —
+ * Measures REAL gas usage for claim() against a locally-deployed contract  -
  * not the analytical estimate in packages/proofs/benchmark/chunk-encoding.js
  * (docs/proof-system.md §4). Run standalone: `pnpm --filter @pi-hunter/contracts test -- --grep "gas report"`
  */

@@ -5,7 +5,7 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
 /// @notice A registered π dataset version. Once registered, `root`,
 /// `datasetHash`, `verifier`, `digitCount`, and `chunkSizeDigits` can never
-/// change — only `active` can be toggled, and only to gate NEW claims
+/// change  -  only `active` can be toggled, and only to gate NEW claims
 /// (docs/proof-system.md §3.2). Existing tokens minted against this version
 /// remain valid and verifiable forever, regardless of `active`.
 struct PiDataset {
@@ -35,7 +35,7 @@ contract PiDatasetRegistry is Ownable {
     constructor(address initialOwner) Ownable(initialOwner) {}
 
     /// @notice Registers a new dataset version. Reverts if `version` was
-    /// already registered — there is deliberately no update/overwrite path.
+    /// already registered  -  there is deliberately no update/overwrite path.
     function registerDataset(
         uint256 version,
         uint256 digitCount,

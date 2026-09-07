@@ -3,7 +3,7 @@ import { getPool } from "../db";
 
 /**
  * All leaderboard metrics are skill/luck-based (match length, rarity,
- * position, discovery count) — never spend-based, per spec §19 ("avoid
+ * position, discovery count)  -  never spend-based, per spec §19 ("avoid
  * rankings that reward spending money").
  */
 export function registerLeaderboardRoute(app: FastifyInstance) {

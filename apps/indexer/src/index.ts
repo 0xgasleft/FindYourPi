@@ -7,7 +7,7 @@ const RPC_URL = process.env.RPC_URL ?? "http://127.0.0.1:8545";
 const NFT_CONTRACT_ADDRESS = process.env.NFT_CONTRACT_ADDRESS as `0x${string}` | undefined;
 const DATABASE_URL = process.env.DATABASE_URL;
 const POLL_INTERVAL_MS = Number(process.env.INDEXER_POLL_INTERVAL_MS ?? 4000);
-// Reorg safety margin (docs/threat-model.md T9) — only process blocks at
+// Reorg safety margin (docs/threat-model.md T9)  -  only process blocks at
 // least this many confirmations deep. Small for local/testnet dev, should
 // be raised for mainnet-grade chains.
 const CONFIRMATIONS = BigInt(process.env.INDEXER_CONFIRMATIONS ?? 2);

@@ -1,0 +1,22 @@
+{
+  "name": "@pi-hunter/gmp-native",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Minimal native N-API addon wrapping real (non-WASM) GMP for arbitrary-precision integer arithmetic. Exists because gmp-wasm (standard 32-bit WebAssembly) hits a hard 4GB linear-memory ceiling around ~125M decimal digits  -  see docs/architecture.md §5.1. Native GMP has no such ceiling (bound only by real system memory).",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "gypfile": true,
+  "scripts": {
+    "install": "node-gyp rebuild",
+    "test": "node test/smoke.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "node-addon-api": "8.3.0"
+  },
+  "devDependencies": {
+    "@pi-hunter/config": "workspace:*",
+    "node-gyp": "11.2.0",
+    "typescript": "5.5.3"
+  }
+}

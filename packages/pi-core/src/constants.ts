@@ -1,5 +1,5 @@
 /**
- * Shared protocol constants. These mirror docs/proof-system.md exactly —
+ * Shared protocol constants. These mirror docs/proof-system.md exactly  -
  * if you change a value here, update that doc (and vice versa).
  */
 

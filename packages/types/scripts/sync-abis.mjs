@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // Extracts just the `.abi` array from packages/contracts' compiled Hardhat
 // artifacts (a gitignored build output) into small, committed JSON files
-// under src/generated/. This is what makes packages/types — and anything
-// that depends on it, like apps/web — buildable (e.g. on Vercel) without
+// under src/generated/. This is what makes packages/types  -  and anything
+// that depends on it, like apps/web  -  buildable (e.g. on Vercel) without
 // needing Hardhat/Solidity in that build at all.
 //
 // Re-run whenever a contract's public interface changes:

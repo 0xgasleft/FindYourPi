@@ -1,6 +1,6 @@
 This is a strong architecture. I would let the agent proceed, but I would make a few changes before Phase 1, because there are two important technical issues hidden in the proposal.
 
-The good news: the core idea—off-chain π search + on-chain cryptographic proof + NFT claim—is exactly the direction I'd take. The proof document explicitly makes the right distinction: the contract proves membership in the committed dataset, rather than trusting the API.
+The good news: the core idea - off-chain π search + on-chain cryptographic proof + NFT claim - is exactly the direction I'd take. The proof document explicitly makes the right distinction: the contract proves membership in the committed dataset, rather than trusting the API.
 
 The 5 things I'd change
 1. 🚨 Don't put 1,024-byte chunks into every claim
@@ -43,7 +43,7 @@ But they're only indexing approximately 1 billion digits initially.
 
 A random 20-digit sequence has an expected occurrence probability around 1 in 10²⁰.
 
-That doesn't mean a 20-digit match is impossible in π—it means your 1B-digit search space is astronomically unlikely to contain one.
+That doesn't mean a 20-digit match is impossible in π - it means your 1B-digit search space is astronomically unlikely to contain one.
 
 So the UX shouldn't advertise:
 
@@ -66,7 +66,7 @@ is fine as a theoretical classification, but the UI should distinguish "tier" fr
 
 Even better:
 
-12-digit match — LEGENDARY
+12-digit match  -  LEGENDARY
 Theoretical rarity: ~1 in 1 trillion
 Currently searched: first 1 billion digits of π
 

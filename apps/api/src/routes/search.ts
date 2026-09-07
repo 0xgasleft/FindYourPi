@@ -43,7 +43,7 @@ export function registerSearchRoute(app: FastifyInstance) {
       digits_indexed: dataset.manifest.digitCount,
     };
 
-    // Best-effort search logging — never blocks or fails the response (spec §16: don't over-retain raw input; only the normalized sequence is stored).
+    // Best-effort search logging  -  never blocks or fails the response (spec §16: don't over-retain raw input; only the normalized sequence is stored).
     void bestEffortQuery(
       `INSERT INTO searches (conversion_mode, normalized_sequence, found, position, match_length, pi_dataset_version, wallet_address)
        VALUES ($1, $2, $3, $4, $5, $6, $7)`,

@@ -4,7 +4,7 @@ import { chunkDigits, unpackNibblesToDigits, buildMerkleTree, getMerkleProof, ve
 /**
  * Proof construction + a standalone verifier that mirrors the Solidity
  * MerkleVerifierV1 logic exactly (docs/proof-system.md §3.3). This package
- * has no dependency on apps/api — given only a copy of the public dataset,
+ * has no dependency on apps/api  -  given only a copy of the public dataset,
  * anyone can build and check a claim proof themselves. That's the whole
  * point (docs/proof-system.md §1, §3.4).
  */
@@ -59,7 +59,7 @@ export function buildOccurrenceProof(
 }
 
 /**
- * Standalone verifier — deliberately reimplements exactly what
+ * Standalone verifier  -  deliberately reimplements exactly what
  * MerkleVerifierV1.verifyOccurrence does on-chain (docs/proof-system.md
  * §3.3), so it can be run independently of the contract or the backend to
  * confirm a claim proof is valid before (or instead of) submitting it.

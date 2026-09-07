@@ -2,7 +2,7 @@
   "name": "@pi-hunter/proofs",
   "private": true,
   "version": "0.1.0",
-  "description": "Merkle chunk proof construction + a standalone verifier for π occurrences, independent of apps/api — the 'don't trust our backend' escape hatch (docs/proof-system.md).",
+  "description": "Merkle chunk proof construction + a standalone verifier for π occurrences, independent of apps/api  -  the 'don't trust our backend' escape hatch (docs/proof-system.md).",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "scripts": {

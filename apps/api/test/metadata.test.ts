@@ -23,8 +23,8 @@ beforeAll(async () => {
 // Regression test for a real bug found during manual testing: a malformed
 // tokenId caused Postgres to throw a type-cast error that leaked as a raw
 // 500 with the internal error message (`invalid input syntax for type
-// bigint`) — should be a clean 400 instead, and never leak driver internals.
-describe("GET /api/metadata/:tokenId — malformed input", () => {
+// bigint`)  -  should be a clean 400 instead, and never leak driver internals.
+describe("GET /api/metadata/:tokenId  -  malformed input", () => {
   it("rejects a non-numeric tokenId with 400, not a leaked DB error", async () => {
     const res = await app.inject({ method: "GET", url: "/api/metadata/not-a-number" });
     expect(res.statusCode).toBe(400);
@@ -40,7 +40,7 @@ describe("GET /api/metadata/:tokenId — malformed input", () => {
 describe("global error handler", () => {
   it("never leaks internal error details for an unexpected 500", async () => {
     // /api/profile/:address has no format validation (any string is a valid
-    // WHERE clause parameter against a TEXT column) so it won't 500 here —
+    // WHERE clause parameter against a TEXT column) so it won't 500 here  -
     // this checks the handler's shape directly by asserting the contract:
     // any 5xx response body is exactly { error: "internal_error" }.
     const res = await app.inject({ method: "GET", url: "/api/discovery/does-not-exist" });

@@ -4,7 +4,7 @@ import type { ActiveDataset } from "./dataset-loader";
 /**
  * Upserts the active dataset's manifest into Postgres' `pi_datasets` table.
  * `discoveries.pi_dataset_version` has a foreign key against this table, so
- * this must run — and succeed — before any search/discovery persistence
+ * this must run  -  and succeed  -  before any search/discovery persistence
  * can work. Not best-effort: if this fails, the API should fail loudly at
  * startup rather than silently dropping every discovery write later.
  */

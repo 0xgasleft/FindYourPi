@@ -10,9 +10,60 @@
  * array is simpler to implement correctly and is explicitly named in the
  * spec (§6) as an acceptable approach. Revisit toward FM-index/BWT if a
  * future dataset version scales toward the billions and the suffix array's
- * memory footprint (O(n), ~4 bytes/digit) becomes the bottleneck — this was
+ * memory footprint (O(n), ~4 bytes/digit) becomes the bottleneck  -  this was
  * anticipated as the fallback path in docs/architecture.md §4.
  */
+
+/**
+ * Stable counting sort of `sa` (an array of indices) by an integer key in
+ * [0, keyRange], returning a new Int32Array in sorted order. O(n), no
+ * comparator function involved at all.
+ *
+ * This replaces what used to be a single `Array.prototype.sort`/
+ * `TypedArray.prototype.sort` call with a custom comparator  -  removed
+ * because BOTH hit real, hard V8 ceilings at dataset scale, confirmed
+ * directly while generating the 500M-digit v2 dataset, not assumed:
+ *   1. Converting to a plain Array first (V8's own Array.prototype.sort
+ *      optimizes custom comparators much better than
+ *      TypedArray.prototype.sort, so this used to be the fast path) hits a
+ *      hard V8 length ceiling for plain JS Arrays well under Int32Array's
+ *      own limits  -  `Array.from(new Int32Array(100_000_000))` succeeds,
+ *      the same call at 200_000_000 throws "RangeError: Invalid array
+ *      length", regardless of available memory.
+ *   2. Sorting the Int32Array in place with a custom comparator (the
+ *      seemingly obvious fallback) hits a SEPARATE V8 restriction:
+ *      "TypeError: Custom comparefn not supported for huge TypedArrays".
+ * Counting sort sidesteps both  -  it never calls a comparator-accepting
+ * sort at all  -  and is asymptotically better besides (O(n) per pass here,
+ * vs O(n log n) for a comparison sort), since our keys are exactly the
+ * small-bounded-integer case counting sort is built for.
+ */
+function countingSortByKey(sa: Int32Array, keyOf: (i: number) => number, keyRange: number): Int32Array {
+  const n = sa.length;
+  const count = new Int32Array(keyRange + 1);
+  for (let i = 0; i < n; i++) count[keyOf(sa[i]!)]!++;
+
+  // Transform counts into an exclusive prefix sum: count[v] becomes the
+  // first output slot for key v. Iterating the input in its original
+  // order and bumping count[v] after each placement keeps this stable  -
+  // required, since prefix-doubling's correctness depends on ties being
+  // broken by the *previous* round's relative order.
+  let sum = 0;
+  for (let v = 0; v <= keyRange; v++) {
+    const c = count[v]!;
+    count[v] = sum;
+    sum += c;
+  }
+
+  const output = new Int32Array(n);
+  for (let i = 0; i < n; i++) {
+    const idx = sa[i]!;
+    const k = keyOf(idx);
+    output[count[k]!] = idx;
+    count[k]! += 1;
+  }
+  return output;
+}
 
 export function buildSuffixArray(digits: Uint8Array): Int32Array {
   const n = digits.length;
@@ -26,16 +77,15 @@ export function buildSuffixArray(digits: Uint8Array): Int32Array {
   const rankAt = (i: number, k: number): number => (i + k < n ? rank[i + k]! : -1);
 
   for (let k = 1; k < n; k <<= 1) {
-    const rr = rank; // capture for comparator closure
+    const rr = rank; // capture for keyOf closures
     const kk = k;
-    const saArr = Array.from(sa); // Array.prototype.sort is significantly faster than TypedArray.sort for custom comparators in V8
-    saArr.sort((a, b) => {
-      const ra = rr[a]!;
-      const rb = rr[b]!;
-      if (ra !== rb) return ra - rb;
-      return rankAt(a, kk) - rankAt(b, kk);
-    });
-    sa = Int32Array.from(saArr);
+    // LSD radix sort by (primary=rank, secondary=rankAt(·,k)): sort by the
+    // least-significant key first (secondary, offset +1 since rankAt can
+    // be -1), then the most-significant key last (primary)  -  two stable
+    // passes reproduce exactly what the removed comparator
+    // `(ra - rb) || (rankAt(a,k) - rankAt(b,k))` did.
+    sa = countingSortByKey(sa, (i) => rankAt(i, kk) + 1, n);
+    sa = countingSortByKey(sa, (i) => rr[i]!, n - 1);
 
     tmp[sa[0]!] = 0;
     for (let i = 1; i < n; i++) {
@@ -93,7 +143,7 @@ export interface SearchResult {
   /** Smallest matching position (spec §7 default: first occurrence). */
   firstPosition: number | null;
   occurrenceCount: number;
-  /** All matching positions, sorted ascending — capped by the caller for very common short sequences. */
+  /** All matching positions, sorted ascending  -  capped by the caller for very common short sequences. */
   positions: number[];
 }
 

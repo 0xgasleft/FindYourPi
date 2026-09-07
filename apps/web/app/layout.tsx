@@ -16,7 +16,7 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Pi Hunter — Find your place in π",
+  title: "Pi Hunter  -  Find your place in π",
   description:
     "Enter a number, name, date, or word. We search the digits of π to find where you belong, then let you claim that exact spot as an on-chain collectible.",
 };

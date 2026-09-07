@@ -5,7 +5,7 @@ import { encodeAbiParameters, keccak256, toHex, parseEventLogs, type Hex } from 
 import { buildDatasetTree, buildOccurrenceProof, type ChunkProof as TsChunkProof } from "@pi-hunter/proofs";
 import { computeDiscoveryId, digitsToBytes } from "@pi-hunter/pi-core";
 
-// Small synthetic dataset — deterministic pseudo-digit sequence, not real π
+// Small synthetic dataset  -  deterministic pseudo-digit sequence, not real π
 // (real π correctness is covered in packages/pi-search's own tests). Fast
 // to build fresh for every test.
 const DIGIT_COUNT = 5000;
@@ -196,7 +196,7 @@ describe("PiHunterNFT", () => {
 
       const nftAsAlice = await hre.viem.getContractAt("PiHunterNFT", nft.address, { client: { wallet: alice } });
       await nftAsAlice.write.commitClaim([commitHash]);
-      // 0 extra blocks mined — reveal in the very next block should still be too early
+      // 0 extra blocks mined  -  reveal in the very next block should still be too early
       await expect(nftAsAlice.write.revealClaim([1n, 1000n, sequenceHex, proofsArg, secret])).to.be.rejectedWith(/too early/);
     });
 
@@ -223,7 +223,7 @@ describe("PiHunterNFT", () => {
       await mine(3);
 
       // Bob knows the revealed plaintext (position/sequence/secret leak at reveal time in general,
-      // but here Bob tries to front-run using Alice's exact secret before she reveals) —
+      // but here Bob tries to front-run using Alice's exact secret before she reveals)  -
       // the commitHash is keyed by committer address, so Bob's own commit lookup won't find it.
       const nftAsBob = await hre.viem.getContractAt("PiHunterNFT", nft.address, { client: { wallet: bob } });
       await expect(nftAsBob.write.revealClaim([1n, 1200n, sequenceHex, proofsArg, secret])).to.be.rejectedWith(/no matching commit/);

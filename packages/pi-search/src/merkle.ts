@@ -2,7 +2,7 @@ import { keccak256, concatHex, type Hex } from "viem";
 
 /**
  * Standard binary Merkle tree over keccak256 leaves, with "duplicate last
- * node" padding at odd-length layers (docs/proof-system.md §3.1/§3.3) — the
+ * node" padding at odd-length layers (docs/proof-system.md §3.1/§3.3)  -  the
  * simplest construction that keeps on-chain verification purely proof-array
  * driven (every level has exactly one sibling entry, derived from the leaf
  * index's bits, with no extra state needed beyond the proof itself).
@@ -10,7 +10,7 @@ import { keccak256, concatHex, type Hex } from "viem";
  * This is a fixed, append-only positional commitment over public dataset
  * chunks (not user-submitted arbitrary leaves), so the well-known
  * "duplicate-leaf" ambiguity that affects some Merkle-tree-of-transactions
- * designs doesn't apply here — every chunk index has one fixed, publicly
+ * designs doesn't apply here  -  every chunk index has one fixed, publicly
  * checkable position and content.
  */
 
@@ -55,7 +55,7 @@ export function getMerkleProof(tree: MerkleTree, index: number): Hex[] {
   return proof;
 }
 
-/** Re-derives the root from a leaf + its proof + its index — the exact logic the on-chain verifier mirrors. */
+/** Re-derives the root from a leaf + its proof + its index  -  the exact logic the on-chain verifier mirrors. */
 export function verifyMerkleProof(leaf: Hex, proof: Hex[], index: number, root: Hex): boolean {
   let hash = leaf;
   let idx = index;

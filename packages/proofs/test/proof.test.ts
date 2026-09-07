@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { buildDatasetTree, buildOccurrenceProof, verifyOccurrenceProof } from "../src/proof";
 
-// Small, fixed digit string standing in for a dataset slice — the point of
+// Small, fixed digit string standing in for a dataset slice  -  the point of
 // these tests is proof mechanics (chunk spanning, tamper detection), not
 // real π digits (that's covered in packages/pi-search's own tests).
 const DIGIT_STR = Array.from({ length: 5000 }, (_, i) => ((i * 7 + 3) % 10)).join("");

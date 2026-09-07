@@ -10,7 +10,7 @@ import { installMockWallet } from "./mock-wallet";
  * test" for the exact commands): a local Hardhat node with the contracts
  * deployed and the dataset registered, apps/api pointed at both, and
  * apps/web pointed at apps/api + the deployed NFT address. This test does
- * not spin any of that up itself — it drives the real, already-running
+ * not spin any of that up itself  -  it drives the real, already-running
  * system, the same way it was manually verified during development.
  */
 test("search finds a real π match and claiming mints a real NFT", async ({ page }) => {

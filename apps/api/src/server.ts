@@ -4,7 +4,7 @@ import { syncDatasetToDb } from "./sync-dataset";
 import { buildApp } from "./app";
 
 const PORT = Number(process.env.PORT ?? 4000);
-const PI_DATASET_PATH = process.env.PI_DATASET_PATH ?? "../../packages/pi-search/data/v1";
+const PI_DATASET_PATH = process.env.PI_DATASET_PATH ?? "../../packages/pi-search/data/v2";
 
 async function main() {
   console.log(`Loading π dataset from ${PI_DATASET_PATH}...`);

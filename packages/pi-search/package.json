@@ -13,6 +13,7 @@
     "benchmark": "tsx scripts/benchmark-search.ts"
   },
   "dependencies": {
+    "@pi-hunter/gmp-native": "workspace:*",
     "@pi-hunter/pi-core": "workspace:*",
     "viem": "2.21.19"
   },

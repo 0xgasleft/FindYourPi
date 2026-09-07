@@ -10,7 +10,7 @@ export interface Achievement {
 }
 
 /**
- * Computed on read from a wallet's existing claimed discoveries — no
+ * Computed on read from a wallet's existing claimed discoveries  -  no
  * separate tracked/awarded state to keep in sync, no fake scarcity (spec
  * §22: "Do not create fake scarcity"). Recomputing is cheap at profile-page
  * scale (a handful of rows per wallet).

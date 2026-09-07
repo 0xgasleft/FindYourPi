@@ -4,12 +4,12 @@ pragma solidity ^0.8.24;
 import {IPiVerifier, ChunkProof} from "./IPiVerifier.sol";
 
 /// @notice The only verifier implementation for π dataset v1. Immutable and
-/// stateless (all functions are `pure`) — deployed once, referenced forever
+/// stateless (all functions are `pure`)  -  deployed once, referenced forever
 /// by any dataset version registered against it. A future verifier (e.g. a
 /// ZK-based one) ships as an entirely separate contract used only by new
 /// dataset versions; this one is never upgraded (docs/proof-system.md §3.6).
 ///
-/// Mirrors packages/proofs/src/proof.ts::verifyOccurrenceProof exactly —
+/// Mirrors packages/proofs/src/proof.ts::verifyOccurrenceProof exactly  -
 /// that TS implementation is the standalone, backend-independent way to
 /// build and check the same proof this contract checks on-chain.
 contract MerkleVerifierV1 is IPiVerifier {

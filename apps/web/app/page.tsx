@@ -4,12 +4,12 @@ import { CornerBrackets } from "./components/corner-brackets";
 import { PiHunt } from "./pi-hunt";
 
 const STEPS = [
-  { n: "01", title: "Enter", body: "A number, name, date, or phrase. Converted deterministically into digits — the exact method is documented, never a black box." },
-  { n: "02", title: "Search π", body: "Checked against a versioned, chunked, Merkle-committed dataset of π's decimal expansion. A real search, every time — never fabricated." },
-  { n: "03", title: "Claim", body: "Connect a wallet only when you're ready to mint. The contract independently re-verifies your proof — it never trusts a server's word for it." },
+  { n: "01", title: "Enter", body: "A number, name, date, or phrase. Converted deterministically into digits  -  the exact method is documented, never a black box." },
+  { n: "02", title: "Search π", body: "Checked against a versioned, chunked, Merkle-committed dataset of π's decimal expansion. A real search, every time  -  never fabricated." },
+  { n: "03", title: "Claim", body: "Connect a wallet only when you're ready to mint. The contract independently re-verifies your proof  -  it never trusts a server's word for it." },
 ];
 
-const STATS = ["50,000,000 DIGITS INDEXED", "CHUNK SIZE 128", "MERKLE COMMITTED", "ON-CHAIN VERIFIED", "π DATASET v1"];
+const STATS = ["500,000,000 DIGITS INDEXED", "CHUNK SIZE 128", "MERKLE COMMITTED", "ON-CHAIN VERIFIED", "π DATASET v2"];
 
 export default function LandingPage() {
   return (
@@ -75,7 +75,7 @@ export default function LandingPage() {
         <h2 className="font-display text-xs font-bold uppercase tracking-[0.3em] text-pi-gold">How it works</h2>
         <p className="mt-3 max-w-lg text-balance text-neutral-500">
           You don&apos;t own π or the sequence itself. A claimed discovery is a blockchain token representing a
-          specific, verified occurrence in it — a collectible, not an investment.
+          specific, verified occurrence in it  -  a collectible, not an investment.
         </p>
 
         <div className="mt-12 grid gap-px overflow-hidden border border-white/10 bg-white/10 sm:grid-cols-3">

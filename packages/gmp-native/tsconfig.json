@@ -1,0 +1,9 @@
+{
+  "extends": "@pi-hunter/config/tsconfig.base.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "noEmit": true
+  },
+  "include": ["index.d.ts", "test/**/*.ts"]
+}

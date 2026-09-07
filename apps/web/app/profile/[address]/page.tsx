@@ -4,7 +4,7 @@ import { RarityBadge } from "../../components/rarity-badge";
 
 export async function generateMetadata({ params }: { params: Promise<{ address: string }> }) {
   const { address } = await params;
-  return { title: `${address.slice(0, 8)}... — Pi Hunter Profile` };
+  return { title: `${address.slice(0, 8)}...  -  Pi Hunter Profile` };
 }
 
 export default async function ProfilePage({ params }: { params: Promise<{ address: string }> }) {

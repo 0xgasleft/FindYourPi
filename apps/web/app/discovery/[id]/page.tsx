@@ -15,9 +15,9 @@ function short(addr: string) {
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
   const discovery = await fetchDiscovery(id);
-  if (!discovery) return { title: "Discovery not found — Pi Hunter" };
+  if (!discovery) return { title: "Discovery not found  -  Pi Hunter" };
 
-  const title = `${discovery.sequence} — Found at position ${discovery.position.toLocaleString()} in π`;
+  const title = `${discovery.sequence}  -  Found at position ${discovery.position.toLocaleString()} in π`;
   const description = "Discover your place in the digits of π.";
   return {
     title,
@@ -88,7 +88,7 @@ export default async function DiscoveryPage({ params }: { params: Promise<{ id: 
 
           <p className="mt-6 text-xs text-neutral-500">
             You do not own π or this sequence itself. A claimed discovery is a blockchain token representing a
-            specific, cryptographically verified occurrence — a collectible, not an investment.
+            specific, cryptographically verified occurrence  -  a collectible, not an investment.
           </p>
         </div>
 

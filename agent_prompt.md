@@ -119,7 +119,7 @@ Do not make unsupported mathematical claims.
 
 The platform must support multiple conversion modes.
 
-## Mode A — Numbers
+## Mode A  -  Numbers
 
 If the user enters:
 
@@ -143,7 +143,7 @@ or allow the user to choose a date normalization mode.
 
 ---
 
-## Mode B — Text
+## Mode B  -  Text
 
 Text must be deterministically converted to digits.
 
@@ -406,7 +406,7 @@ Theoretical rarity:
 
 Dataset:
 
-**π v1 — first 1,000,000,000 digits**
+**π v1  -  first 1,000,000,000 digits**
 
 Then show:
 
@@ -1746,7 +1746,7 @@ Example:
 
 Title:
 
-"314159 — Found at position 482,193 in π"
+"314159  -  Found at position 482,193 in π"
 
 Description:
 
@@ -1796,7 +1796,7 @@ Do not try to build everything simultaneously.
 
 Implement in this order:
 
-## Phase 1 — Foundation
+## Phase 1  -  Foundation
 
 * monorepo
 * TypeScript
@@ -1805,7 +1805,7 @@ Implement in this order:
 * basic UI
 * environment configuration
 
-## Phase 2 — π engine
+## Phase 2  -  π engine
 
 * dataset ingestion
 * dataset hashing
@@ -1813,7 +1813,7 @@ Implement in this order:
 * search API
 * benchmark
 
-## Phase 3 — Core product
+## Phase 3  -  Core product
 
 * input conversion
 * search UI
@@ -1821,42 +1821,42 @@ Implement in this order:
 * discovery IDs
 * rarity
 
-## Phase 4 — Smart contract
+## Phase 4  -  Smart contract
 
 * NFT contract
 * tests
 * deployment scripts
 * claim flow
 
-## Phase 5 — Proof system
+## Phase 5  -  Proof system
 
 * canonical dataset commitment
 * proof generation
 * proof verification
 * integration
 
-## Phase 6 — NFT
+## Phase 6  -  NFT
 
 * metadata
 * artwork
 * decentralized storage
 * token pages
 
-## Phase 7 — Social
+## Phase 7  -  Social
 
 * discovery pages
 * OG images
 * sharing
 * challenges
 
-## Phase 8 — Gamification
+## Phase 8  -  Gamification
 
 * profiles
 * leaderboards
 * achievements
 * daily challenge
 
-## Phase 9 — Hardening
+## Phase 9  -  Hardening
 
 * security
 * rate limiting

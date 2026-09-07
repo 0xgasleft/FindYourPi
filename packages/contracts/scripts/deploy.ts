@@ -7,15 +7,18 @@ import { join } from "node:path";
  * the dataset version described by a manifest.json produced by
  * `pnpm --filter @pi-hunter/pi-search generate` (see packages/pi-search).
  *
- * Usage: pnpm deploy:localhost -- --manifest ../pi-search/data/v1/manifest.json
+ * Usage: PI_MANIFEST_PATH=../pi-search/data/v2/manifest.json pnpm deploy:localhost
+ *
+ * An env var, not a --manifest CLI flag: Hardhat's own `run` task rejects
+ * any argv it doesn't recognize (HH305 "Unrecognized param") before this
+ * script ever gets to see it  -  confirmed directly, not assumed  -  so a
+ * flag-based override silently never worked. Defaults to v2 (this
+ * project's actual, largest generated dataset  -  see docs/architecture.md
+ * §5.1 for why 500,000,000 digits, not v1's original 80,000,000, is now
+ * the real target).
  */
-function argValue(flag: string, fallback: string): string {
-  const i = process.argv.indexOf(flag);
-  return i !== -1 && process.argv[i + 1] ? process.argv[i + 1]! : fallback;
-}
-
 async function main() {
-  const manifestPath = argValue("--manifest", join(__dirname, "../../pi-search/data/v1/manifest.json"));
+  const manifestPath = process.env.PI_MANIFEST_PATH ?? join(__dirname, "../../pi-search/data/v2/manifest.json");
   const manifest = JSON.parse(readFileSync(manifestPath, "utf-8"));
 
   const [deployer] = await hre.viem.getWalletClients();
