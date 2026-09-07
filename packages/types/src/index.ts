@@ -4,7 +4,7 @@ export interface SearchResponse {
   normalized_input: string;
   full_conversion: string;
   truncated: boolean;
-  conversion_mode: "number" | "ascii" | "utf8" | "hash";
+  conversion_mode: "number" | "base36" | "base95" | "ascii" | "utf8" | "hash";
   pi_dataset_version: number;
   digits_indexed: number;
   found: boolean;

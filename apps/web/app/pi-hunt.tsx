@@ -22,8 +22,17 @@ type Phase =
   | { kind: "claimed" }
   | { kind: "error"; message: string };
 
-function guessMode(input: string): "number" | "ascii" {
-  return /^[0-9\s/\-.:]+$/.test(input) ? "number" : "ascii";
+function guessMode(input: string): "number" | "base36" | "base95" | "utf8" {
+  if (/^[0-9\s/\-.:]+$/.test(input)) return "number";
+  // base36 (read the word as a base-36 integer, ~1.556 decimal digits/char)
+  // makes ordinary short words/names findable at a real dataset size — see
+  // packages/pi-core/src/conversion.ts's module doc.
+  if (/^[a-zA-Z0-9]+$/.test(input)) return "base36";
+  // base95 covers the rest of printable ASCII (spaces, punctuation) at
+  // ~1.988 decimal digits/char — still denser than ASCII mode's fixed 3.
+  if (/^[\x20-\x7E]+$/.test(input)) return "base95";
+  // Anything outside printable ASCII (real Unicode) falls back to UTF-8 mode.
+  return "utf8";
 }
 
 export function PiHunt() {
