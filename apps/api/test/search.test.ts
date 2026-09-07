@@ -76,6 +76,34 @@ describe("POST /api/search", () => {
     expect(res.json().error).toBe("conversion_failed");
   });
 
+  it("accepts base36 mode and normalizes to the base-36-as-decimal encoding", async () => {
+    const res = await app.inject({ method: "POST", url: "/api/search", payload: { input: "abc", mode: "base36" } });
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.conversion_mode).toBe("base36");
+    expect(body.normalized_input).toBe("60024"); // 36^3 + (a=10,b=11,c=12 as base36) — denser than ASCII's 9 digits
+  });
+
+  it("rejects base36 mode for characters outside a-z/0-9 with a clear error, not a 500", async () => {
+    const res = await app.inject({ method: "POST", url: "/api/search", payload: { input: "café!", mode: "base36" } });
+    expect(res.statusCode).toBe(400);
+    expect(res.json().error).toBe("conversion_failed");
+  });
+
+  it("accepts base95 mode, covering spaces and punctuation base36 rejects", async () => {
+    const res = await app.inject({ method: "POST", url: "/api/search", payload: { input: "a b", mode: "base95" } });
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.conversion_mode).toBe("base95");
+    expect(body.normalized_input).toBe("1444066");
+  });
+
+  it("rejects base95 mode for non-printable-ASCII input with a clear error, not a 500", async () => {
+    const res = await app.inject({ method: "POST", url: "/api/search", payload: { input: "café!", mode: "base95" } });
+    expect(res.statusCode).toBe(400);
+    expect(res.json().error).toBe("conversion_failed");
+  });
+
   it("returns a discovery_id that matches the shared pi-core derivation exactly", async () => {
     const query = DIGIT_STR.slice(40, 46); // guaranteed present — taken directly from the fixture
     const res = await app.inject({ method: "POST", url: "/api/search", payload: { input: query, mode: "number" } });

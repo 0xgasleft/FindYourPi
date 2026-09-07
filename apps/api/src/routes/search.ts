@@ -7,7 +7,7 @@ import { bestEffortQuery } from "../db";
 
 const SearchBody = z.object({
   input: z.string().min(1).max(500),
-  mode: z.enum(["number", "ascii", "utf8", "hash"]),
+  mode: z.enum(["number", "base36", "base95", "ascii", "utf8", "hash"]),
   hashKeepDigits: z.number().int().min(1).max(64).optional(),
   walletAddress: z.string().optional(),
 });
