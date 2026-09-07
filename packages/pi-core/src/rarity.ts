@@ -26,7 +26,7 @@ export function rarityTierForLength(matchLength: number, tiers: RarityTierBounds
   for (const t of tiers) {
     if (matchLength >= t.minLength && (t.maxLength === null || matchLength <= t.maxLength)) return t.tier;
   }
-  // Below COMMON's floor (1-2 digits) is still COMMON in product terms — everything
+  // Below COMMON's floor (1-2 digits) is still COMMON in product terms  -  everything
   // shorter than the configured minimum falls into the lowest tier rather than being unranked.
   return tiers[0]!.tier;
 }
@@ -57,7 +57,7 @@ export type Achievability =
 const ACHIEVABILITY_LABELS: Record<Achievability, string> = {
   "common-at-depth": "Common at this index depth",
   "achievable-at-depth": "Achievable at this index depth",
-  "rare-at-depth": "Rare — most searches this long come back empty",
+  "rare-at-depth": "Rare  -  most searches this long come back empty",
   "extremely-unlikely-at-depth": "Extremely unlikely at this index depth",
   "not-achievable-at-depth": "Not realistically achievable at this index depth yet",
 };

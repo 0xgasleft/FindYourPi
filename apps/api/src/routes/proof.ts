@@ -12,7 +12,7 @@ const ProofBody = z.object({
 
 /**
  * Builds a claim-ready proof for a given (position, sequence). This is a
- * convenience — see docs/proof-system.md §1/§3.4: the proof is fully
+ * convenience  -  see docs/proof-system.md §1/§3.4: the proof is fully
  * self-contained, so the frontend (or anyone with a copy of the dataset)
  * could construct the exact same thing via packages/proofs directly
  * without calling this endpoint at all. The contract never trusts this
@@ -33,7 +33,7 @@ export function registerProofRoute(app: FastifyInstance) {
 
     const occurrence = buildOccurrenceProof(dataset.chunks, dataset.tree, dataset.manifest.chunkSizeDigits, position, sequence.length);
 
-    // Self-check before responding — if this ever fails, it's a bug in our
+    // Self-check before responding  -  if this ever fails, it's a bug in our
     // own proof construction, not something the caller should have to catch.
     const selfCheck = verifyOccurrenceProof(dataset.manifest.merkleRoot, dataset.manifest.chunkSizeDigits, sequence, occurrence);
     if (!selfCheck) {

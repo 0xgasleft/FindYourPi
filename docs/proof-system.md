@@ -1,4 +1,4 @@
-# Proof System Design — π Occurrence Verification
+# Proof System Design  -  π Occurrence Verification
 
 This is the single most important design decision in the project. Everything else
 (search engine, contract, frontend) is replaceable; the proof system is what
@@ -7,10 +7,10 @@ around a database that users are simply asked to trust.
 
 > **Revision note:** this document was reviewed before Phase 1 implementation
 > began. The review changed three things from the original draft: the chunk
-> encoding (now benchmarked, not assumed — §4), the verifier upgrade story
-> (now immutable/versioned, not a swappable module — §3.6), and front-running
+> encoding (now benchmarked, not assumed  -  §4), the verifier upgrade story
+> (now immutable/versioned, not a swappable module  -  §3.6), and front-running
 > handling (now architected as an optional commit-reveal path, not just
-> accepted — §3.7). See `docs/threat-model.md` for the full threat list.
+> accepted  -  §3.7). See `docs/threat-model.md` for the full threat list.
 
 ## 1. The problem, precisely
 
@@ -18,7 +18,7 @@ We need a mechanism such that:
 
 > Given a claimed `(position, matchLength, sequence)`, a smart contract (or any
 > independent third party) can verify that the digits of π at `position` in the
-> **canonical, versioned π dataset** actually equal `sequence` — without the
+> **canonical, versioned π dataset** actually equal `sequence`  -  without the
 > contract storing the dataset, and without unconditionally trusting the API
 > server that ran the search.
 
@@ -31,12 +31,12 @@ public, recomputable constant). The actual attacker model is:
   contract, bypassing the backend entirely.
 
 The dataset's *authenticity relative to real π* is a separate, weaker trust
-problem (see §5) — it is auditable by anyone, rather than something that must
+problem (see §5)  -  it is auditable by anyone, rather than something that must
 be re-trusted on every claim.
 
 ## 2. Options considered
 
-### Option 1 — Merkleized π chunks (chosen)
+### Option 1  -  Merkleized π chunks (chosen)
 
 Partition the canonical dataset into fixed-size chunks. Build a standard
 binary Merkle tree over `keccak256(chunk_bytes)` leaves. The root is the
@@ -52,40 +52,40 @@ it to the claimed sequence.
 **Properties:** cheap to generate, cheap to verify on any EVM chain, fully
 transparent, no novel cryptography, easy to audit, easy to reimplement
 independently. Weaknesses: proof size grows with `log(chunks)`; a
-compromised/incorrect *root* is not detected by this scheme alone (see §5) —
+compromised/incorrect *root* is not detected by this scheme alone (see §5)  -
 it only proves "this substring is part of whatever dataset produced this
 root."
 
-### Option 2 — Vector / Verkle commitment
+### Option 2  -  Vector / Verkle commitment
 
 Constant-size proofs regardless of dataset size, but requires a trusted setup
 or newer elliptic-curve primitives, immature/nonstandard tooling for
 arbitrary EVM chains today, and meaningfully more implementation and audit
-risk for a first version. **Rejected for MVP** — the benchmark in §4 shows
+risk for a first version. **Rejected for MVP**  -  the benchmark in §4 shows
 Merkle proofs are already cheap enough (~99k gas total, dominated by ordinary
 ERC-721 mint overhead, not proof size) that Verkle's main advantage doesn't
 move the needle yet. Revisit if dataset size or claim volume grows enough
 that proof calldata becomes the actual bottleneck.
 
-### Option 3 — ZK proof of substring membership
+### Option 3  -  ZK proof of substring membership
 
 A zk-SNARK/STARK proving "the committed dataset contains `sequence` at
 `position`" without revealing anything else. The natural Phase 4 target in
 the decentralization roadmap, but disproportionate for MVP: substring-
 matching circuits over a multi-hundred-million-digit dataset are a real
 research/engineering project on their own, and the threat they uniquely
-defend against — chunk data disclosure — isn't a real concern here, since
+defend against  -  chunk data disclosure  -  isn't a real concern here, since
 chunk contents are just public π digits with no privacy value. **Rejected
 for MVP, scheduled as Phase 4.**
 
-### Option 4 — Immutable, versioned verifier contracts (chosen upgrade path)
+### Option 4  -  Immutable, versioned verifier contracts (chosen upgrade path)
 
 Rather than a swappable/upgradeable verifier module sitting behind the NFT
 contract, each dataset version permanently records the address of the
 verifier contract used to accept claims against it, set once at registration
 and never changed. A future ZK verifier ships as a new contract
 (`ZKVerifierV2`) used only by *new* dataset versions; existing tokens keep
-referencing `MerkleVerifierV1` forever. See §3.6 — this was changed from the
+referencing `MerkleVerifierV1` forever. See §3.6  -  this was changed from the
 original "swappable module" draft specifically so "your place in π is
 permanent" isn't undercut by an admin key that can change what verification
 means for already-minted tokens.
@@ -96,16 +96,16 @@ means for already-minted tokens.
 
 * Digits stored as decimal values `0–9` (not ASCII), decimal digits only,
   **position 0 = first digit after the decimal point** (the leading `3` is
-  never counted — this is the one global convention every component must
+  never counted  -  this is the one global convention every component must
   share).
 * **Max on-chain-provable match length: 64 digits.** Rarity tiers go up to
   "MYTHIC, 20+ digits," but even a future 100-billion-digit dataset (v3+ in
-  the roadmap) has an expected count of ~10⁻⁹ for a 20-digit sequence —
+  the roadmap) has an expected count of ~10⁻⁹ for a 20-digit sequence  -
   practically unreachable. A 64-digit cap leaves enormous headroom over
   anything realistically discoverable at any dataset size this project will
   reach, while keeping the proof's worst case bounded.
 * **Chunk size: 128 digits, packed 4 bits/digit (64 bytes/chunk).** Chosen
-  by benchmarking, not assumption — see §4. Chunk size ≥ max match length
+  by benchmarking, not assumption  -  see §4. Chunk size ≥ max match length
   guarantees any match spans **at most 2 adjacent chunks**, so proof/calldata
   size is bounded regardless of match length or position.
 * Tree depth for a 1B-digit dataset at this chunk size:
@@ -126,7 +126,7 @@ struct PiDataset {
     uint256 chunkSize;     // in digits (128 for v1)
     bytes32 root;          // Merkle commitment over packed chunks
     bytes32 datasetHash;   // hash of the full canonical file, for off-chain audit
-    address verifier;      // immutable once set — see 3.6
+    address verifier;      // immutable once set  -  see 3.6
     bool active;           // gates NEW claims only, never invalidates past ones
 }
 
@@ -144,7 +144,7 @@ discoveries remain valid forever).
 Chunk data is packed 4 bits/digit (two digits per byte, high nibble first);
 the claimed `sequence` itself is kept **unpacked** (1 byte/digit) since it's
 short (≤64 bytes) and this keeps the value the contract actually compares
-against trivially human-auditable — packing it saves negligible gas (~1% of
+against trivially human-auditable  -  packing it saves negligible gas (~1% of
 the total, confirmed in the benchmark) at the cost of readability.
 
 ```solidity
@@ -177,7 +177,7 @@ Verification (`MerkleVerifierV1`, the only implementation for MVP):
 3. Return true only if every check passes.
 
 This function is deterministic, side-effect-free, and independently
-reimplementable by anyone from the public dataset — it is the load-bearing
+reimplementable by anyone from the public dataset  -  it is the load-bearing
 piece that stops the failure mode called out in the spec (§14): the contract
 never mints on the backend's say-so, it recomputes the proof itself.
 
@@ -207,7 +207,7 @@ function claim(
 ```
 
 The backend's only role is to *find* candidate occurrences fast and hand the
-frontend a ready-made proof — but the proof is fully self-contained and the
+frontend a ready-made proof  -  but the proof is fully self-contained and the
 contract does not call out to any off-chain service to accept it. A user with
 their own copy of the π dataset and a script (deliberately provided in
 `packages/proofs` as a standalone verifier, independent of the API) can
@@ -227,9 +227,9 @@ discoveryId = keccak256(abi.encode(
 ```
 
 Fixed, ABI-encoded, defined once in `packages/pi-core` and imported by
-frontend, backend, and contract test code — never reimplemented ad hoc. A
+frontend, backend, and contract test code  -  never reimplemented ad hoc. A
 discovery's identity does not depend on which verifier contract accepted it
-— that's pinned separately, permanently, at the dataset-registry level
+ -  that's pinned separately, permanently, at the dataset-registry level
 (§3.6), so it never needs to appear in the id.
 
 ### 3.6 Why the verifier is immutable and versioned, not upgradeable
@@ -238,13 +238,13 @@ The original draft proposed a swappable verifier module behind the NFT
 contract, reasoning that ZK verification could later replace Merkle proofs
 without a migration. On review this was rejected: an upgradeable
 verification path means users implicitly trust whoever controls the upgrade
-— directly at odds with "your place in π is permanent." The fix keeps the
+ -  directly at odds with "your place in π is permanent." The fix keeps the
 upgrade path but removes the trust dependency:
 
-* `PiDatasetRegistry` — dataset commitments are immutable once registered.
-* `PiHunterNFT` — discovery semantics (`discoveryId` derivation, `claimed`
+* `PiDatasetRegistry`  -  dataset commitments are immutable once registered.
+* `PiHunterNFT`  -  discovery semantics (`discoveryId` derivation, `claimed`
   tracking, token/discovery association) never change.
-* Verifier contracts — each one is deployed once, immutable, and referenced
+* Verifier contracts  -  each one is deployed once, immutable, and referenced
   by exactly the dataset versions that named it at registration time
   (`MerkleVerifierV1` for v1; a hypothetical `ZKVerifierV2` would only ever
   be referenced by v2+). Deploying a new verifier and registering a new
@@ -252,8 +252,8 @@ upgrade path but removes the trust dependency:
   continue to be, verified.
 
 This makes "NFT #827 was minted under π Dataset v1 using Verification
-Protocol v1" a permanent, checkable fact — exposed on the public
-verification page (§38 of the spec) — rather than something an admin could
+Protocol v1" a permanent, checkable fact  -  exposed on the public
+verification page (§38 of the spec)  -  rather than something an admin could
 retroactively redefine.
 
 ### 3.7 Front-running: commit-reveal as a first-class, optional path
@@ -289,14 +289,14 @@ function revealClaim(
 }
 ```
 
-`commitClaim` reveals only a hash — not the discovery, not even which
-occurrence is being targeted — so a mempool observer has nothing to
+`commitClaim` reveals only a hash  -  not the discovery, not even which
+occurrence is being targeted  -  so a mempool observer has nothing to
 front-run. MVP UX default is still direct `claim()` (simpler, no wait, fine
 for the common case); the frontend switches a given claim to the
 commit-reveal path once the match's rarity tier crosses a configurable
 threshold (e.g. RARE and above), where the extra step is worth the
 protection. Both paths share the same `discoveryId` derivation, the same
-`claimed` mapping, and the same verifier call, so this is additive — it
+`claimed` mapping, and the same verifier call, so this is additive  -  it
 doesn't change what a discovery *is*, only how contested ones get claimed.
 
 ### 3.8 Discovery state as a first-class product object
@@ -317,7 +317,7 @@ CLAIMED
 ```
 
 `claimed[discoveryId]` (plus the indexer's `discoveries`/`claims` tables) is
-exactly this state machine — the API can show a search result as "FOUND —
+exactly this state machine  -  the API can show a search result as "FOUND  -
 UNCLAIMED" immediately, independent of the mint transaction, which is both
 more honest (the discovery existed the moment π was indexed, minting doesn't
 create it) and a stronger competitive/social hook ("someone else might claim
@@ -329,7 +329,7 @@ Reviewed and challenged: the original draft picked 1,024-byte chunks
 (1 byte/digit) and justified the resulting ~3.3KB calldata as "cheap on
 Base" without numbers. Re-done as an actual computation against fixed EVM
 gas-schedule constants (EIP-2028 calldata pricing: 16 gas/nonzero byte;
-`keccak256`: 30 + 6 gas/word) — reproducible via
+`keccak256`: 30 + 6 gas/word)  -  reproducible via
 `packages/proofs/benchmark/chunk-encoding.js`:
 
 ```text
@@ -349,21 +349,21 @@ label                                          | depth | chunkDataB | totalCalld
 Findings:
 
 * **Calldata dominates cost**, not `keccak256` (proof hashing is ~2,000 gas
-  total across every scenario — tree-depth growth from smaller chunks is
+  total across every scenario  -  tree-depth growth from smaller chunks is
   effectively free).
-* Packing digits 4-bit halves chunk-data calldata for the same chunk size —
+* Packing digits 4-bit halves chunk-data calldata for the same chunk size  -
   a strictly better move at every chunk size tested (256B packed beats 256B
   unpacked; 128B packed beats 128B unpacked).
 * Total gas is a **flat minimum between ~64 and ~160 digits/chunk** once
-  packed (98,300–99,400 gas) — the naive 1,024-byte design was ~22% more
+  packed (98,300–99,400 gas)  -  the naive 1,024-byte design was ~22% more
   expensive than the chosen point for no benefit.
-* **Chosen: 128-digit chunks, packed 4-bit/digit** — sits at the flat
+* **Chosen: 128-digit chunks, packed 4-bit/digit**  -  sits at the flat
   minimum, a round number comfortably ≥ the 64-digit max-match-length cap
   (preserving the ≤2-chunks-touched invariant with headroom), ~98.8k total
   gas for a worst-case claim on Base. At typical Base L2 gas prices this is
   a sub-cent-to-low-single-digit-cent transaction; the precise USD figure
-  moves with L1 data-availability pricing, so the gas number — not a dollar
-  estimate — is the durable claim here.
+  moves with L1 data-availability pricing, so the gas number  -  not a dollar
+  estimate  -  is the durable claim here.
 
 This replaces "cheap on Base" with a number, and the benchmark script stays
 in the repo so the choice can be re-validated (or revisited) whenever
@@ -376,15 +376,15 @@ placeholder. Once `PiHunterNFT`/`MerkleVerifierV1`/`PiDatasetRegistry` were
 actually implemented and tested (`packages/contracts/test/gas-report.test.ts`,
 run against a local Hardhat chain with real generated proofs from
 `packages/proofs`), **measured gas for `claim()` came in at ~192,000–195,000
-gas** — roughly double the analytical estimate. The gap is entirely on the
+gas**  -  roughly double the analytical estimate. The gap is entirely on the
 storage side, not proof verification: `_finalizeClaim` writes three fresh
 mapping slots (`claimed`, `tokenIdToDiscoveryId`, `discoveryIdToTokenId`)
 plus standard ERC-721 `_owners`/`_balances` writes, and several of those are
-cold SSTOREs (~20,000+ gas each) — the "~46,000 gas, rough" placeholder
+cold SSTOREs (~20,000+ gas each)  -  the "~46,000 gas, rough" placeholder
 simply undercounted how many distinct storage slots a real mint touches.
 Proof verification itself (calldata + `keccak256`) matches the analytical
 model closely; the correction is specific to mint bookkeeping cost, not the
-Merkle scheme. ~195k gas is still a cheap transaction on an L2 like Base —
+Merkle scheme. ~195k gas is still a cheap transaction on an L2 like Base  -
 the conclusion "keep the chosen chunk encoding, it's not the bottleneck"
 stands, but the dollar-cost intuition should be calibrated off this
 measured number, not the original analytical one.
@@ -394,7 +394,7 @@ measured number, not the original analytical one.
 The Merkle proof guarantees "this substring is part of the dataset behind
 `root`." It does **not**, by itself, guarantee "`root` was computed from the
 *real, correct* digits of π." That is a one-time, auditable-by-anyone claim
-about how the dataset was produced, not a per-claim trust requirement — and,
+about how the dataset was produced, not a per-claim trust requirement  -  and,
 per review, this auditability ships **as part of MVP, not deferred to a
 later phase**:
 
@@ -405,9 +405,9 @@ later phase**:
   `packages/proofs`, exact location finalized in Phase 2) regenerates the
   digits from the published algorithm/parameters and recomputes the Merkle
   root, so a third party can run one command and confirm the on-chain root
-  matches — no trust in this project's infrastructure required for that
+  matches  -  no trust in this project's infrastructure required for that
   check.
-* Dataset versions are immutable and append-only — a bad version can be
+* Dataset versions are immutable and append-only  -  a bad version can be
   deactivated for new claims but never silently edited (§36 of the spec).
 
 This is the honest MVP answer required by the spec (§13, §57): the simplest

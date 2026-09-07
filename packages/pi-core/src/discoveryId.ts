@@ -3,7 +3,7 @@ import { encodeAbiParameters, keccak256, toBytes, type Hex } from "viem";
 /**
  * Canonical, single source of truth for discoveryId derivation
  * (docs/proof-system.md §3.5). Frontend, backend, and Solidity test code
- * must all agree with this exact encoding — never reimplement ad hoc.
+ * must all agree with this exact encoding  -  never reimplement ad hoc.
  *
  * discoveryId = keccak256(abi.encode(
  *   datasetVersion,  // uint256

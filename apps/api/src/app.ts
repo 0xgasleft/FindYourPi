@@ -10,7 +10,7 @@ import { registerLeaderboardRoute } from "./routes/leaderboard";
 import { registerProfileRoute } from "./routes/profile";
 import { getActiveDataset } from "./dataset-loader";
 
-/** Builds the Fastify app WITHOUT listening — the dataset must already be
+/** Builds the Fastify app WITHOUT listening  -  the dataset must already be
  * loaded (via loadActiveDataset in production, setActiveDatasetForTesting
  * in tests) before calling this. Kept separate from server.ts so tests can
  * exercise routes via `.inject()` without opening a real port. */

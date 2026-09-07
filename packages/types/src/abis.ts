@@ -1,4 +1,4 @@
-// Committed, generated ABI files — see scripts/sync-abis.mjs. Deliberately
+// Committed, generated ABI files  -  see scripts/sync-abis.mjs. Deliberately
 // NOT read live from packages/contracts/artifacts (a gitignored Hardhat
 // build output): that would make anything depending on this package
 // (apps/web included) require a working Solidity toolchain at build time,

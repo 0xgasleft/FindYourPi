@@ -13,7 +13,7 @@ const config: HardhatUserConfig = {
     },
   },
   networks: {
-    // Base Sepolia (testnet) — see docs/architecture.md §3 for the chain choice.
+    // Base Sepolia (testnet)  -  see docs/architecture.md §3 for the chain choice.
     // Never hardcode a private key; DEPLOYER_PRIVATE_KEY is dev/testnet-only,
     // read from env, never committed (see .env.example).
     baseSepolia: {

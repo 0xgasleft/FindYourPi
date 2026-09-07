@@ -13,7 +13,7 @@ export interface DiscoveryRow {
 }
 
 /**
- * Deterministic NFT metadata (spec §15) — reproducible from on-chain
+ * Deterministic NFT metadata (spec §15)  -  reproducible from on-chain
  * discovery data alone (position/matchLength/rarity/dataset version),
  * never including raw user input;
  * `display_text` is an explicit, user-opted-in public label, not the raw
@@ -23,7 +23,7 @@ export function buildMetadata(discovery: DiscoveryRow, apiBaseUrl: string) {
   const tokenId = discovery.token_id ?? 0;
   return {
     name: `π Discovery #${tokenId}`,
-    description: `A permanent claim to a specific occurrence in the digits of π. You do not own π or this sequence itself — you own a token representing a verified occurrence at position ${discovery.position.toLocaleString()} in π dataset v${discovery.pi_dataset_version}.`,
+    description: `A permanent claim to a specific occurrence in the digits of π. You do not own π or this sequence itself  -  you own a token representing a verified occurrence at position ${discovery.position.toLocaleString()} in π dataset v${discovery.pi_dataset_version}.`,
     image: `${apiBaseUrl}/api/artwork/${tokenId}`,
     external_url: `${apiBaseUrl.replace(/\/api.*$/, "")}/discovery/${discovery.discovery_id}`,
     attributes: [

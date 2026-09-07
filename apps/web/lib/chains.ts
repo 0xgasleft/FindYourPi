@@ -1,7 +1,7 @@
 import { defineChain } from "viem";
 import { baseSepolia } from "viem/chains";
 
-/** Local Hardhat node (see packages/contracts `pnpm node` / `pnpm deploy:localhost`) — used for local dev/demo. */
+/** Local Hardhat node (see packages/contracts `pnpm node` / `pnpm deploy:localhost`)  -  used for local dev/demo. */
 export const hardhatLocal = defineChain({
   id: 31337,
   name: "Hardhat Local",

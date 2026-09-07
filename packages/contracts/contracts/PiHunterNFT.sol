@@ -8,7 +8,7 @@ import {PiDatasetRegistry, PiDataset} from "./PiDatasetRegistry.sol";
 import {IPiVerifier, ChunkProof} from "./IPiVerifier.sol";
 
 /// @notice The Pi Hunter NFT. Discovery semantics (discoveryId derivation,
-/// duplicate-claim prevention, token/discovery association) never change —
+/// duplicate-claim prevention, token/discovery association) never change  -
 /// see docs/proof-system.md §3.5-3.6. Verification itself is delegated to
 /// whichever immutable verifier contract the referenced dataset version
 /// named at registration time; this contract never re-implements or
@@ -17,20 +17,20 @@ import {IPiVerifier, ChunkProof} from "./IPiVerifier.sol";
 /// Two ways to claim (docs/proof-system.md §3.7):
 ///  - `claim`: immediate, simple, the MVP default for ordinary finds.
 ///  - `commitClaim` + `revealClaim`: for rare finds worth protecting from
-///    mempool front-running — the commit step reveals only a hash.
+///    mempool front-running  -  the commit step reveals only a hash.
 /// Both funnel into the same discoveryId derivation and `claimed` mapping,
 /// so adding the commit-reveal path never changed what a discovery *is*.
 contract PiHunterNFT is ERC721, Ownable, Pausable {
     PiDatasetRegistry public immutable registry;
 
-    /// @dev Minimum blocks between commitClaim and revealClaim — long enough
+    /// @dev Minimum blocks between commitClaim and revealClaim  -  long enough
     /// that a same-block/adjacent-block mempool copy of the reveal transaction
     /// cannot also have committed in time to satisfy this delay.
     uint256 public constant MIN_REVEAL_DELAY = 3;
 
     uint256 private _nextTokenId = 1;
 
-    /// @dev Owner-settable, NOT part of discovery identity or verification —
+    /// @dev Owner-settable, NOT part of discovery identity or verification  -
     /// purely where to fetch display metadata (spec §37). The metadata at
     /// this URI is itself deterministically reproducible from on-chain
     /// discovery data (packages/proofs, apps/api's metadata builder), so
@@ -74,7 +74,7 @@ contract PiHunterNFT is ERC721, Ownable, Pausable {
         return _metadataBaseURI;
     }
 
-    /// @notice Direct claim — verifies the proof and mints in one transaction.
+    /// @notice Direct claim  -  verifies the proof and mints in one transaction.
     /// Vulnerable to ordinary mempool front-running (docs/threat-model.md T5);
     /// fine for common/uncommon finds, not recommended for rare ones.
     function claim(
@@ -143,7 +143,7 @@ contract PiHunterNFT is ERC721, Ownable, Pausable {
 
     /// @dev `claimed[discoveryId]` is set before `_safeMint`'s external
     /// `onERC721Received` callback, so a reentrant call from a malicious
-    /// recipient contract hits the duplicate-claim check and reverts —
+    /// recipient contract hits the duplicate-claim check and reverts  -
     /// standard checks-effects-interactions, no separate reentrancy guard needed.
     function _finalizeClaim(
         bytes32 discoveryId,

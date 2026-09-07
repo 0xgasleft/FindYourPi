@@ -1,4 +1,5 @@
 export * from "./pi-generator";
+export * from "./parallel-pi-generator";
 export * from "./isqrt";
 export * from "./chunking";
 export * from "./merkle";

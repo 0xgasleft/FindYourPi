@@ -7,18 +7,18 @@ import * as THREE from "three";
 import { DECORATIVE_PI_DIGITS } from "../pi-digits";
 
 /**
- * Full-viewport 3D hero: a faceted "π core" (icosahedron — many sharp
+ * Full-viewport 3D hero: a faceted "π core" (icosahedron  -  many sharp
  * triangular facets, deliberately not a smooth sphere) with thin orbital
  * rings and a swarm of the actual first ~100 decorative π digits floating
- * in a shell around it. Purely decorative background layer — see
+ * in a shell around it. Purely decorative background layer  -  see
  * hero-3d.tsx for the reduced-motion / no-WebGL fallback that skips this
  * entirely.
  *
- * Note: deliberately no postprocessing/bloom pass — @react-three/postprocessing's
+ * Note: deliberately no postprocessing/bloom pass  -  @react-three/postprocessing's
  * EffectComposer rendered the whole canvas opaque black here (its render
  * target doesn't preserve the alpha this scene needs to blend with the
  * page background). The glow read is achieved with emissive materials +
- * a CSS radial-gradient glow behind the canvas instead — simpler, and one
+ * a CSS radial-gradient glow behind the canvas instead  -  simpler, and one
  * fewer fragile dependency.
  */
 

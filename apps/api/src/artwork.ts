@@ -10,7 +10,7 @@ const TIER_COLORS: Record<string, { accent: string; glow: string }> = {
 };
 
 /**
- * Deterministic SVG artwork (spec §37) — reproducible byte-for-byte from
+ * Deterministic SVG artwork (spec §37)  -  reproducible byte-for-byte from
  * discovery data alone, no randomness, no external assets. Encodes π
  * symbol, sequence, position, match length, rarity, and token number, per
  * the spec's example composition.

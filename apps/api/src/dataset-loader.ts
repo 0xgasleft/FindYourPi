@@ -11,7 +11,7 @@ let active: ActiveDataset | null = null;
 
 /** Loads the dataset once at process startup and builds the Merkle tree
  * needed for proof construction. This is the only place the (potentially
- * large) raw digit file and suffix array are held in memory — see
+ * large) raw digit file and suffix array are held in memory  -  see
  * packages/pi-search/src/dataset.ts for the "why full in-memory is fine at
  * this dataset's actual size" reasoning. */
 export function loadActiveDataset(dir: string): ActiveDataset {
@@ -22,11 +22,11 @@ export function loadActiveDataset(dir: string): ActiveDataset {
 }
 
 export function getActiveDataset(): ActiveDataset {
-  if (!active) throw new Error("Dataset not loaded yet — call loadActiveDataset() at startup");
+  if (!active) throw new Error("Dataset not loaded yet  -  call loadActiveDataset() at startup");
   return active;
 }
 
-/** Test-only seam — lets tests inject a small synthetic dataset instead of
+/** Test-only seam  -  lets tests inject a small synthetic dataset instead of
  * loading the real (large) one from disk. Never called from server.ts. */
 export function setActiveDatasetForTesting(dataset: ActiveDataset): void {
   active = dataset;

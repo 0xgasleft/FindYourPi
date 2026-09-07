@@ -1,4 +1,4 @@
-/** Viewfinder-style corner accents — reinforces the sharp/technical
+/** Viewfinder-style corner accents  -  reinforces the sharp/technical
  * identity on panels without adding a full border. Purely decorative. */
 export function CornerBrackets({ color = "border-pi-gold/40", size = 14 }: { color?: string; size?: number }) {
   const base = `absolute ${color}`;

@@ -5,11 +5,11 @@ import { MANIFEST_FILENAME, RAW_DIGITS_FILENAME, SUFFIX_ARRAY_FILENAME, type Dat
 
 /**
  * Simple, fully-in-memory dataset loader. At this dataset's actual size
- * (see the manifest — tens of millions of digits, not billions), loading
+ * (see the manifest  -  tens of millions of digits, not billions), loading
  * the raw digits (~1 byte/digit) and suffix array (~4 bytes/digit) fully
  * into memory is a reasonable, simple choice. If a future dataset version
  * scales toward the billions, this is the place to switch to memory-mapped
- * / streaming access — anticipated in docs/architecture.md §4 but not
+ * / streaming access  -  anticipated in docs/architecture.md §4 but not
  * needed at the current scale.
  */
 export interface LoadedDataset {

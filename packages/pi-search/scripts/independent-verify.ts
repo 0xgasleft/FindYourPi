@@ -2,24 +2,25 @@
 /**
  * STANDALONE independent verification of a published π dataset.
  *
- * This script deliberately does NOT trust the stored raw-digits.bin file —
+ * This script deliberately does NOT trust the stored raw-digits.bin file  -
  * it regenerates every digit from scratch via the same reproducible
- * Chudnovsky algorithm (packages/pi-search/src/pi-generator.ts) using only
- * the manifest's claimed digitCount, then re-derives the chunking and
+ * Chudnovsky algorithm (packages/pi-search/src/pi-generator.ts, single-
+ * threaded  -  see scripts/generate-dataset.ts's module doc for why) using
+ * only the manifest's claimed digitCount, then re-derives the chunking and
  * Merkle root independently and compares everything against the published
  * manifest. This is the concrete tool behind the claim in
  * docs/threat-model.md T3 and docs/proof-system.md §5: "anyone can
- * independently regenerate π and recompute the root" — run this, don't
+ * independently regenerate π and recompute the root"  -  run this, don't
  * take our word for it.
  *
- * Usage: pnpm verify -- --dir ./data/v1
+ * Usage: pnpm verify -- --dir ./data/v2
  * Exit code 0 = verified, non-zero = mismatch (details printed).
  */
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { computePiDigits } from "../src/pi-generator";
 import { chunkDigits } from "../src/chunking";
 import { buildMerkleTree, leafHash } from "../src/merkle";
+import { computePiDigits } from "../src/pi-generator";
 import { keccak256 } from "viem";
 import { MANIFEST_FILENAME, RAW_DIGITS_FILENAME, type DatasetManifest } from "../src/manifest";
 
@@ -28,21 +29,18 @@ function argValue(flag: string, fallback: string): string {
   return i !== -1 && process.argv[i + 1] ? process.argv[i + 1]! : fallback;
 }
 
-const dir = argValue("--dir", process.env.PI_DATASET_PATH ?? "data/v1");
+const dir = argValue("--dir", process.env.PI_DATASET_PATH ?? "data/v2");
 
 async function main() {
   const manifest: DatasetManifest = JSON.parse(readFileSync(join(dir, MANIFEST_FILENAME), "utf-8"));
   console.log(`Independently verifying dataset v${manifest.version} (${manifest.digitCount.toLocaleString()} digits) at ${dir}`);
-  console.log("This regenerates every digit from scratch — it will take roughly as long as the original generation did.\n");
+  console.log("This regenerates every digit from scratch  -  it will take roughly as long as the original generation did.\n");
 
   let failures = 0;
 
   console.time("regenerate digits from scratch");
-  const regeneratedStr = computePiDigits(manifest.digitCount);
+  const regenerated = await computePiDigits(manifest.digitCount);
   console.timeEnd("regenerate digits from scratch");
-
-  const regenerated = new Uint8Array(manifest.digitCount);
-  for (let i = 0; i < manifest.digitCount; i++) regenerated[i] = regeneratedStr.charCodeAt(i) - 48;
 
   const storedRaw = readFileSync(join(dir, RAW_DIGITS_FILENAME));
   const storedMatches = Buffer.compare(Buffer.from(regenerated.buffer, regenerated.byteOffset, regenerated.byteLength), storedRaw) === 0;

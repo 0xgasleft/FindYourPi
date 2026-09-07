@@ -21,7 +21,7 @@ cache/
 typechain-types/
 *.tsbuildinfo
 
-# Generated π dataset artifacts (large binaries) — reproducible via
+# Generated π dataset artifacts (large binaries)  -  reproducible via
 # `pnpm --filter @pi-hunter/pi-search generate`, see packages/pi-search/README.md.
 packages/pi-search/data/
 

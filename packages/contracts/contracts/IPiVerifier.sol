@@ -13,7 +13,7 @@ struct ChunkProof {
 /// dataset committed to by `root`, without the caller (or this interface)
 /// needing to know how the proof is constructed internally. Each dataset
 /// version permanently records which verifier implementation it uses
-/// (docs/proof-system.md §3.6) — verifiers are immutable and versioned,
+/// (docs/proof-system.md §3.6)  -  verifiers are immutable and versioned,
 /// never swapped out from under an already-registered dataset.
 interface IPiVerifier {
     function verifyOccurrence(

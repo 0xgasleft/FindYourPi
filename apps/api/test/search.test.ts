@@ -81,7 +81,7 @@ describe("POST /api/search", () => {
     expect(res.statusCode).toBe(200);
     const body = res.json();
     expect(body.conversion_mode).toBe("base36");
-    expect(body.normalized_input).toBe("60024"); // 36^3 + (a=10,b=11,c=12 as base36) — denser than ASCII's 9 digits
+    expect(body.normalized_input).toBe("60024"); // 36^3 + (a=10,b=11,c=12 as base36)  -  denser than ASCII's 9 digits
   });
 
   it("rejects base36 mode for characters outside a-z/0-9 with a clear error, not a 500", async () => {
@@ -105,7 +105,7 @@ describe("POST /api/search", () => {
   });
 
   it("returns a discovery_id that matches the shared pi-core derivation exactly", async () => {
-    const query = DIGIT_STR.slice(40, 46); // guaranteed present — taken directly from the fixture
+    const query = DIGIT_STR.slice(40, 46); // guaranteed present  -  taken directly from the fixture
     const res = await app.inject({ method: "POST", url: "/api/search", payload: { input: query, mode: "number" } });
     const body = res.json();
     expect(body.found).toBe(true);
