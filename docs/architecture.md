@@ -4,7 +4,7 @@ Companion documents: `docs/threat-model.md` (what can go wrong and why it's
 mitigated), `docs/proof-system.md` (the on-chain verification design in
 depth), `docs/rarity.md` (rarity tiers vs. what's actually discoverable in
 the current dataset). This document covers the system as a whole and the
-decisions made to get from the spec product requirements to a buildable plan.
+decisions made to turn the product requirements into a buildable plan.
 
 ## 1. Component map
 

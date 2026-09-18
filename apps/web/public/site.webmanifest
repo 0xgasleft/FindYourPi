@@ -1,0 +1,17 @@
+{
+  "name": "Pi Hunter",
+  "short_name": "Pi Hunter",
+  "description": "Find a verifiable occurrence in Pi and claim it on Arc Mainnet.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#07080f",
+  "theme_color": "#07080f",
+  "icons": [
+    {
+      "src": "/brand/pi-hunter-icon.png",
+      "sizes": "1254x1254",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

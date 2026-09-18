@@ -1,0 +1,26 @@
+# Dependencies are installed by Vercel from pnpm-lock.yaml.
+node_modules/
+**/node_modules/
+.pnpm-store/
+
+# Local/generated datasets other than the committed 5 MB Arc POC files in
+# apps/web/public/dataset/arc-grant-v3.
+packages/pi-search/data/
+data/
+
+# Local build, cache, test, and environment artifacts.
+.git/
+.vercel/
+.env*
+**/.next/
+**/out/
+**/dist/
+**/build/
+**/coverage/
+**/artifacts/
+**/cache/
+**/typechain-types/
+**/test-results/
+**/playwright-report/
+**/blob-report/
+*.log

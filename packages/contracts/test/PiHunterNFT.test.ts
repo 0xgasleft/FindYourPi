@@ -61,12 +61,16 @@ describe("PiHunterNFT", () => {
     const { sequenceHex, proofsArg, discoveryId } = buildClaimArgs(chunks, tree, 100, 6);
 
     const nftAsAlice = await hre.viem.getContractAt("PiHunterNFT", nft.address, { client: { wallet: alice } });
-    await nftAsAlice.write.claim([1n, 100n, sequenceHex, proofsArg]);
+    await nftAsAlice.write.claim([1n, 100n, sequenceHex, proofsArg, "314159", 0]);
 
     expect((await nft.read.ownerOf([1n])).toLowerCase()).to.equal(alice.account.address.toLowerCase());
     expect(await nft.read.claimed([discoveryId])).to.equal(true);
     expect(await nft.read.tokenIdToDiscoveryId([1n])).to.equal(discoveryId);
     expect(await nft.read.discoveryIdToTokenId([discoveryId])).to.equal(1n);
+    expect(await nft.read.balanceOf([alice.account.address])).to.equal(1n);
+    expect(await nft.read.tokenOfOwnerByIndex([alice.account.address, 0n])).to.equal(1n);
+    expect(await nft.read.tokenInput([1n])).to.equal("314159");
+    expect(await nft.read.tokenInputKind([1n])).to.equal(0);
   });
 
   it("emits DiscoveryClaimed with the correct fields", async () => {
@@ -74,7 +78,7 @@ describe("PiHunterNFT", () => {
     const { sequenceHex, proofsArg, discoveryId } = buildClaimArgs(chunks, tree, 200, 8);
 
     const nftAsAlice = await hre.viem.getContractAt("PiHunterNFT", nft.address, { client: { wallet: alice } });
-    const hash = await nftAsAlice.write.claim([1n, 200n, sequenceHex, proofsArg]);
+    const hash = await nftAsAlice.write.claim([1n, 200n, sequenceHex, proofsArg, "200th coordinate", 1]);
     const receipt = await publicClient.waitForTransactionReceipt({ hash });
 
     const events = parseEventLogs({ abi: nft.abi, logs: receipt.logs, eventName: "DiscoveryClaimed" });
@@ -90,10 +94,10 @@ describe("PiHunterNFT", () => {
     const { sequenceHex, proofsArg } = buildClaimArgs(chunks, tree, 300, 6);
 
     const nftAsAlice = await hre.viem.getContractAt("PiHunterNFT", nft.address, { client: { wallet: alice } });
-    await nftAsAlice.write.claim([1n, 300n, sequenceHex, proofsArg]);
+    await nftAsAlice.write.claim([1n, 300n, sequenceHex, proofsArg, "300300", 0]);
 
     const nftAsBob = await hre.viem.getContractAt("PiHunterNFT", nft.address, { client: { wallet: bob } });
-    await expect(nftAsBob.write.claim([1n, 300n, sequenceHex, proofsArg])).to.be.rejectedWith(/already claimed/);
+    await expect(nftAsBob.write.claim([1n, 300n, sequenceHex, proofsArg, "another label", 1])).to.be.rejectedWith(/already claimed/);
   });
 
   it("rejects a claim with a tampered sequence (invalid proof)", async () => {
@@ -102,7 +106,7 @@ describe("PiHunterNFT", () => {
     const wrongSequenceHex = toHex(digitsToBytes("999999"));
 
     const nftAsAlice = await hre.viem.getContractAt("PiHunterNFT", nft.address, { client: { wallet: alice } });
-    await expect(nftAsAlice.write.claim([1n, 400n, wrongSequenceHex, proofsArg])).to.be.rejectedWith(/invalid proof/);
+    await expect(nftAsAlice.write.claim([1n, 400n, wrongSequenceHex, proofsArg, "999999", 0])).to.be.rejectedWith(/invalid proof/);
   });
 
   it("rejects a claim against an unregistered dataset version", async () => {
@@ -110,20 +114,20 @@ describe("PiHunterNFT", () => {
     const { sequenceHex, proofsArg } = buildClaimArgs(chunks, tree, 500, 6);
 
     const nftAsAlice = await hre.viem.getContractAt("PiHunterNFT", nft.address, { client: { wallet: alice } });
-    await expect(nftAsAlice.write.claim([2n, 500n, sequenceHex, proofsArg])).to.be.rejected;
+    await expect(nftAsAlice.write.claim([2n, 500n, sequenceHex, proofsArg, "500500", 0])).to.be.rejected;
   });
 
   it("rejects new claims once the dataset version is deactivated, but does not affect existing tokens", async () => {
     const { owner, alice, bob, registry, nft, chunks, tree } = await deployFixture();
     const first = buildClaimArgs(chunks, tree, 600, 6);
     const nftAsAlice = await hre.viem.getContractAt("PiHunterNFT", nft.address, { client: { wallet: alice } });
-    await nftAsAlice.write.claim([1n, 600n, first.sequenceHex, first.proofsArg]);
+    await nftAsAlice.write.claim([1n, 600n, first.sequenceHex, first.proofsArg, "600600", 0]);
 
     await registry.write.setActive([1n, false], { account: owner.account.address });
 
     const second = buildClaimArgs(chunks, tree, 700, 6);
     const nftAsBob = await hre.viem.getContractAt("PiHunterNFT", nft.address, { client: { wallet: bob } });
-    await expect(nftAsBob.write.claim([1n, 700n, second.sequenceHex, second.proofsArg])).to.be.rejectedWith(/not open for new claims/);
+    await expect(nftAsBob.write.claim([1n, 700n, second.sequenceHex, second.proofsArg, "700700", 0])).to.be.rejectedWith(/not open for new claims/);
 
     // the earlier claim's token remains owned and intact
     expect((await nft.read.ownerOf([1n])).toLowerCase()).to.equal(alice.account.address.toLowerCase());
@@ -145,9 +149,16 @@ describe("PiHunterNFT", () => {
     const { owner, alice, nft, chunks, tree } = await deployFixture();
     const { sequenceHex, proofsArg } = buildClaimArgs(chunks, tree, 1300, 6);
     const nftAsAlice = await hre.viem.getContractAt("PiHunterNFT", nft.address, { client: { wallet: alice } });
-    await nftAsAlice.write.claim([1n, 1300n, sequenceHex, proofsArg]);
+    await nftAsAlice.write.claim([1n, 1300n, sequenceHex, proofsArg, "Find Pi", 1]);
 
-    expect(await nft.read.tokenURI([1n])).to.equal("");
+    const metadataUri = await nft.read.tokenURI([1n]);
+    expect(metadataUri).to.match(/^data:application\/json;base64,/);
+    const metadata = JSON.parse(Buffer.from(metadataUri.split(",")[1]!, "base64").toString("utf-8")) as { image: string; submitted_input_base64: string; attributes: Array<{ trait_type: string; value: string }> };
+    const svg = Buffer.from(metadata.image.split(",")[1]!, "base64").toString("utf-8");
+    expect(svg).to.include(DIGIT_STR.slice(1300, 1306));
+    expect(svg).to.include("VERIFIED AT POSITION 1300");
+    expect(Buffer.from(metadata.submitted_input_base64, "base64").toString("utf-8")).to.equal("Find Pi");
+    expect(metadata.attributes).to.deep.include({ trait_type: "Input Type", value: "Text" });
     await nft.write.setMetadataBaseURI(["https://api.example.com/api/metadata/"], { account: owner.account.address });
     expect(await nft.read.tokenURI([1n])).to.equal("https://api.example.com/api/metadata/1");
 
@@ -161,7 +172,7 @@ describe("PiHunterNFT", () => {
     await nft.write.pause({ account: owner.account.address });
     const { sequenceHex, proofsArg } = buildClaimArgs(chunks, tree, 800, 6);
     const nftAsAlice = await hre.viem.getContractAt("PiHunterNFT", nft.address, { client: { wallet: alice } });
-    await expect(nftAsAlice.write.claim([1n, 800n, sequenceHex, proofsArg])).to.be.rejected;
+    await expect(nftAsAlice.write.claim([1n, 800n, sequenceHex, proofsArg, "800800", 0])).to.be.rejected;
   });
 
   describe("commit-reveal claim path", () => {
@@ -181,7 +192,7 @@ describe("PiHunterNFT", () => {
 
       await mine(3);
 
-      await nftAsAlice.write.revealClaim([1n, 900n, sequenceHex, proofsArg, secret]);
+      await nftAsAlice.write.revealClaim([1n, 900n, sequenceHex, proofsArg, secret, "Pi hunter", 1]);
       expect(await nft.read.claimed([discoveryId])).to.equal(true);
       expect((await nft.read.ownerOf([1n])).toLowerCase()).to.equal(alice.account.address.toLowerCase());
     });
@@ -197,7 +208,7 @@ describe("PiHunterNFT", () => {
       const nftAsAlice = await hre.viem.getContractAt("PiHunterNFT", nft.address, { client: { wallet: alice } });
       await nftAsAlice.write.commitClaim([commitHash]);
       // 0 extra blocks mined  -  reveal in the very next block should still be too early
-      await expect(nftAsAlice.write.revealClaim([1n, 1000n, sequenceHex, proofsArg, secret])).to.be.rejectedWith(/too early/);
+      await expect(nftAsAlice.write.revealClaim([1n, 1000n, sequenceHex, proofsArg, secret, "100010", 0])).to.be.rejectedWith(/too early/);
     });
 
     it("rejects a reveal whose secret doesn't match any commit", async () => {
@@ -207,7 +218,7 @@ describe("PiHunterNFT", () => {
 
       const nftAsAlice = await hre.viem.getContractAt("PiHunterNFT", nft.address, { client: { wallet: alice } });
       await mine(5);
-      await expect(nftAsAlice.write.revealClaim([1n, 1100n, sequenceHex, proofsArg, wrongSecret])).to.be.rejectedWith(/no matching commit/);
+      await expect(nftAsAlice.write.revealClaim([1n, 1100n, sequenceHex, proofsArg, wrongSecret, "110011", 0])).to.be.rejectedWith(/no matching commit/);
     });
 
     it("prevents a different address from stealing a reveal for someone else's commit", async () => {
@@ -226,7 +237,7 @@ describe("PiHunterNFT", () => {
       // but here Bob tries to front-run using Alice's exact secret before she reveals)  -
       // the commitHash is keyed by committer address, so Bob's own commit lookup won't find it.
       const nftAsBob = await hre.viem.getContractAt("PiHunterNFT", nft.address, { client: { wallet: bob } });
-      await expect(nftAsBob.write.revealClaim([1n, 1200n, sequenceHex, proofsArg, secret])).to.be.rejectedWith(/no matching commit/);
+      await expect(nftAsBob.write.revealClaim([1n, 1200n, sequenceHex, proofsArg, secret, "other", 1])).to.be.rejectedWith(/no matching commit/);
     });
   });
 });

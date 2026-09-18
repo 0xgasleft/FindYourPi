@@ -45,7 +45,7 @@ describe("gas report (informational, not an assertion)", () => {
     const lenSingle = 12;
     const seqSingle = toHex(digitsToBytes(DIGIT_STR.slice(posSingle, posSingle + lenSingle)));
     const proofSingle = toSolidityProofs(buildOccurrenceProof(chunks, tree, CHUNK_SIZE, posSingle, lenSingle).proofs);
-    const hash1 = await nftAsAlice.write.claim([1n, BigInt(posSingle), seqSingle, proofSingle]);
+    const hash1 = await nftAsAlice.write.claim([1n, BigInt(posSingle), seqSingle, proofSingle, DIGIT_STR.slice(posSingle, posSingle + lenSingle), 0]);
     const r1 = await publicClient.waitForTransactionReceipt({ hash: hash1 });
 
     // Two-chunk claim: straddles a chunk boundary, worst-case proof shape (docs/proof-system.md §3.1).
@@ -53,7 +53,7 @@ describe("gas report (informational, not an assertion)", () => {
     const lenDouble = 20;
     const seqDouble = toHex(digitsToBytes(DIGIT_STR.slice(posDouble, posDouble + lenDouble)));
     const proofDouble = toSolidityProofs(buildOccurrenceProof(chunks, tree, CHUNK_SIZE, posDouble, lenDouble).proofs);
-    const hash2 = await nftAsAlice.write.claim([1n, BigInt(posDouble), seqDouble, proofDouble]);
+    const hash2 = await nftAsAlice.write.claim([1n, BigInt(posDouble), seqDouble, proofDouble, DIGIT_STR.slice(posDouble, posDouble + lenDouble), 0]);
     const r2 = await publicClient.waitForTransactionReceipt({ hash: hash2 });
 
     console.log(`\n  [gas report] single-chunk claim (matchLength=${lenSingle}):  ${r1.gasUsed.toString()} gas`);

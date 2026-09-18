@@ -1,6 +1,15 @@
 import hre from "hardhat";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { defineChain } from "viem";
+
+const arcMainnet = defineChain({
+  id: 5042,
+  name: "Arc",
+  nativeCurrency: { name: "USDC", symbol: "USDC", decimals: 18 },
+  rpcUrls: { default: { http: ["https://rpc.mainnet.arc.io"] } },
+  blockExplorers: { default: { name: "Arc Explorer", url: "https://explorer.arc.io" } },
+});
 
 /**
  * Deploys PiDatasetRegistry + MerkleVerifierV1 + PiHunterNFT, then registers
@@ -18,19 +27,27 @@ import { join } from "node:path";
  * the real target).
  */
 async function main() {
-  const manifestPath = process.env.PI_MANIFEST_PATH ?? join(__dirname, "../../pi-search/data/v2/manifest.json");
+  const defaultManifestPath = hre.network.name === "arcMainnet"
+    ? join(__dirname, "../../../apps/web/public/dataset/arc-grant-v3/manifest.json")
+    : join(__dirname, "../../pi-search/data/v2/manifest.json");
+  const manifestPath = process.env.PI_MANIFEST_PATH ?? defaultManifestPath;
   const manifest = JSON.parse(readFileSync(manifestPath, "utf-8"));
 
-  const [deployer] = await hre.viem.getWalletClients();
+  const isArc = hre.network.name === "arcMainnet";
+  const clientConfig = isArc ? { chain: arcMainnet } : {};
+  const [deployer] = await hre.viem.getWalletClients(clientConfig);
+  if (!deployer) throw new Error("No deployer account is configured. Set DEPLOYER_PRIVATE_KEY for this network.");
+  const publicClient = await hre.viem.getPublicClient(clientConfig);
+  const client = { public: publicClient, wallet: deployer };
   console.log(`Deploying with account: ${deployer.account.address}`);
 
-  const registry = await hre.viem.deployContract("PiDatasetRegistry", [deployer.account.address]);
+  const registry = await hre.viem.deployContract("PiDatasetRegistry", [deployer.account.address], { client });
   console.log(`PiDatasetRegistry: ${registry.address}`);
 
-  const verifier = await hre.viem.deployContract("MerkleVerifierV1", []);
+  const verifier = await hre.viem.deployContract("MerkleVerifierV1", [], { client });
   console.log(`MerkleVerifierV1:  ${verifier.address}`);
 
-  const nft = await hre.viem.deployContract("PiHunterNFT", [deployer.account.address, registry.address]);
+  const nft = await hre.viem.deployContract("PiHunterNFT", [deployer.account.address, registry.address], { client });
   console.log(`PiHunterNFT:       ${nft.address}`);
 
   await registry.write.registerDataset([
