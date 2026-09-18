@@ -67,6 +67,8 @@ describe("PiHunterNFT", () => {
     expect(await nft.read.claimed([discoveryId])).to.equal(true);
     expect(await nft.read.tokenIdToDiscoveryId([1n])).to.equal(discoveryId);
     expect(await nft.read.discoveryIdToTokenId([discoveryId])).to.equal(1n);
+    expect(await nft.read.balanceOf([alice.account.address])).to.equal(1n);
+    expect(await nft.read.tokenOfOwnerByIndex([alice.account.address, 0n])).to.equal(1n);
   });
 
   it("emits DiscoveryClaimed with the correct fields", async () => {
@@ -147,7 +149,12 @@ describe("PiHunterNFT", () => {
     const nftAsAlice = await hre.viem.getContractAt("PiHunterNFT", nft.address, { client: { wallet: alice } });
     await nftAsAlice.write.claim([1n, 1300n, sequenceHex, proofsArg]);
 
-    expect(await nft.read.tokenURI([1n])).to.equal("");
+    const metadataUri = await nft.read.tokenURI([1n]);
+    expect(metadataUri).to.match(/^data:application\/json;base64,/);
+    const metadata = JSON.parse(Buffer.from(metadataUri.split(",")[1]!, "base64").toString("utf-8")) as { image: string };
+    const svg = Buffer.from(metadata.image.split(",")[1]!, "base64").toString("utf-8");
+    expect(svg).to.include(DIGIT_STR.slice(1300, 1306));
+    expect(svg).to.include("VERIFIED AT POSITION 1300");
     await nft.write.setMetadataBaseURI(["https://api.example.com/api/metadata/"], { account: owner.account.address });
     expect(await nft.read.tokenURI([1n])).to.equal("https://api.example.com/api/metadata/1");
 

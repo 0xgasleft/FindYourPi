@@ -40,4 +40,28 @@
     background-size: theme("backgroundSize.grid");
     mask-image: radial-gradient(ellipse 60% 50% at 50% 30%, black 40%, transparent 100%);
   }
+
+  .immersive-panel {
+    animation: hologram-float 5.5s ease-in-out infinite, hologram-flicker 4s linear infinite;
+    transform-style: preserve-3d;
+  }
+
+  .immersive-title {
+    animation: title-glow 3.5s ease-in-out infinite;
+  }
+
+  @keyframes hologram-float {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(0, -10px, 0); }
+  }
+
+  @keyframes hologram-flicker {
+    0%, 7%, 9%, 100% { filter: brightness(1); }
+    8% { filter: brightness(1.18); }
+  }
+
+  @keyframes title-glow {
+    0%, 100% { opacity: 0.82; text-shadow: 0 0 18px rgba(242, 201, 76, 0.18); }
+    50% { opacity: 1; text-shadow: 0 0 30px rgba(34, 211, 238, 0.42); }
+  }
 }

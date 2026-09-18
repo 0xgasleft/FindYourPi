@@ -34,6 +34,9 @@ module.exports = {
           cyan: "#22d3ee",
           magenta: "#ec4899",
         },
+        arc: {
+          mint: "#69e0bc",
+        },
       },
       fontFamily: {
         display: ["var(--font-display)", "system-ui", "sans-serif"],

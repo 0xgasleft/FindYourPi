@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "digitCount": 5000000,
+  "chunkSizeDigits": 128,
+  "chunkCount": 39063,
+  "merkleRoot": "0x202f8b39109be0131002ea039c13c17cd596ba5f417a5e6eeedb8b3c31fa5ad3",
+  "datasetHash": "0x078c6cc17a0606cc15cf36116a6c8b51aa283fd8784a026d783a67452511f271",
+  "algorithm": "chudnovsky-binary-splitting",
+  "generatedAt": "2026-09-18T17:46:26.994Z"
+}

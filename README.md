@@ -1,5 +1,11 @@
 # Pi Hunter
 
+> **Arc grant POC branch:** `grant/arc-static-poc` replaces the API/indexer
+> deployment path with a static, browser-verifiable five-million-digit proof
+> of concept for Arc Mainnet. Follow [the Arc POC runbook](docs/arc-grant-poc.md)
+> on this branch. The remainder of this README documents the retained
+> large-scale architecture for the future version.
+
 Find your place in π. Enter a number, name, date, or word  -  it's
 deterministically converted into digits, searched against a versioned,
 publicly auditable π dataset, and if it's found, the specific occurrence can

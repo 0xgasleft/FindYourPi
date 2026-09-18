@@ -1,12 +1,12 @@
 import { createConfig, http } from "wagmi";
 import { injected } from "wagmi/connectors";
-import { hardhatLocal, baseSepolia } from "./chains";
+import { arcMainnet, hardhatLocal } from "./chains";
 
 // WalletConnect is a natural addition (spec §17) but needs a project ID the
 // user must supply  -  omitted from the MVP config rather than hardcoding a
 // placeholder. Injected covers MetaMask/Coinbase Wallet/browser wallets for now.
 export const wagmiConfig = createConfig({
-  chains: [hardhatLocal, baseSepolia],
+  chains: [arcMainnet, hardhatLocal],
   connectors: [injected()],
   // Required for Next.js SSR: without this, wagmi restores a persisted
   // wallet connection (from localStorage) synchronously on the client,
@@ -16,6 +16,6 @@ export const wagmiConfig = createConfig({
   ssr: true,
   transports: {
     [hardhatLocal.id]: http(),
-    [baseSepolia.id]: http(process.env.NEXT_PUBLIC_RPC_URL ?? baseSepolia.rpcUrls.default.http[0]),
+    [arcMainnet.id]: http(process.env.NEXT_PUBLIC_RPC_URL ?? arcMainnet.rpcUrls.default.http[0]),
   },
 });

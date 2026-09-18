@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // The grant POC has no server, database, or API. Everything needed to find
+  // and prove an occurrence ships as static, publicly auditable assets.
+  output: "export",
   reactStrictMode: false,
   // Turbopack is the default build/dev engine as of Next.js 16. wagmi's
   // optional MetaMask SDK / WalletConnect connectors reference Node-only

@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "generate": "tsx scripts/generate-dataset.ts",
     "verify": "tsx scripts/independent-verify.ts",
-    "benchmark": "tsx scripts/benchmark-search.ts"
+    "benchmark": "tsx scripts/benchmark-search.ts",
+    "grant-poc-dataset": "tsx scripts/make-grant-poc-dataset.ts"
   },
   "dependencies": {
     "@pi-hunter/gmp-native": "workspace:*",
